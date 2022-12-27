@@ -1,0 +1,63 @@
+@use "mixin";
+@use "variable";
+/*==========================================================================
+common - 全体に共通するスタイル
+========================================================================== */
+// pcのみ表示
+@include mixin.mq(sm){
+  .is-pc{
+    display:none;
+  }
+}
+
+//スマホのみ表示
+@include mixin.mq(md){
+  .is-sp{
+    display:none;
+  }
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background: variable.$color-background;
+  color: variable.$color-text;
+  font-family: variable.$font-family-default;
+	line-height: 1.45;
+	font-weight: 500;
+  font-size: 1.6rem;
+}
+
+.inner{
+  width:1200px;
+  max-width:100%;
+  margin: 0 auto;
+  padding:0 20px;
+}
+
+.btn{
+  display: inline-block;
+  text-align: center;
+  line-height:50px;
+  width:100px;
+  height:50px;
+  border:1px solid variable.$color-main;
+  background:variable.$color-main;
+  color:variable.$color-white;
+  cursor: pointer;
+  border-radius: 50px;
+  box-shadow: 0 0 5px #333;
+  @include mixin.hover-opacity();
+}
+
+.accent{
+  border-bottom:4px solid variable.$color-main;
+  display: inline-block;
+}
+
+.ttl{
+  font-weight: bold;
+  font-size: 2.2rem;
+}

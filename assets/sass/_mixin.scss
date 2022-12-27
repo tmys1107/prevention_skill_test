@@ -1,0 +1,25 @@
+/*==========================================================================
+@mixins
+========================================================================== */
+//マップ型変数breakpointsを定義
+$breakpoints: (
+//キー　　値
+  'sm': 'screen and (max-width: 767px)',
+  'md': 'screen and (min-width: 768px)'
+) !default;
+
+//メディアクエリ用のmixinを定義。デフォ値はmd
+@mixin mq($breakpoint: md) {
+//map-get(マップ型変数, キー)で値を取得
+  @media #{map-get($breakpoints, $breakpoint)} {
+    //この中をカスタムできる
+    @content;
+  }
+}
+
+@mixin hover-opacity(){
+  transition: .3s;
+  &:hover{
+    opacity:.7;
+  }
+}
