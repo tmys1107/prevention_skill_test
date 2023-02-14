@@ -3,70 +3,92 @@ $(function(){
         /*==========================================================================
         # ファイルの読み込み
         ========================================================================== */
-        url: './test/sasatu.txt',
+        url: './test/sasatu.csv',
         success: function(data){
-            var quiz_list = [];
-            var line = [];
-            var f = data;
-            var i = 0;
-            var quiz_num = 0;
-            var choice_value = 0;
-            var now_quiz = [];
-            var true_answer = 0;
-            var quiz_number = 0;
+            let quiz_list = [];
+            let quiz_table = [];
+            let line = [];
+            let f = data;
+            let i = 0;
+            let quiz_num = 0;
+            let choice_value = 0;
+            let now_quiz = [];
+            let true_answer = 0;
+            let quiz_number = 0;
             /*==========================================================================
             # function
             ========================================================================== */
             //問題の読み込み
-            function getQuiz(){
+            function initQuiz(){
                 // quiz_list[問題番号][問題分,問1,問2,問3,問4,答え番号,解説]
                 f = f.split(/\r\n|\n|\r/g);
-                console.log(f.length);
                 for(i = 0; i<f.length; i++){
                     line = f[i].replace(/\r\n|\n|\r/g,"");
                     line = line.split(",");
                     quiz_list.push(line);
-                    console.log(quiz_list[i]);
+                }
+            }
+
+            function getQuiz() {
+                // 問題番号をランダムに出力
+                quiz_num = Math.floor( Math.random() * (quiz_list.length - 1) ) ;
+                quiz_table = quiz_list[quiz_num];
+                quiz = {
+                    "question":quiz_table[1],
+                    "choice":[
+                        quiz_table[2],
+                        quiz_table[3],
+                        quiz_table[4],
+                        quiz_table[5]
+                        ],
+                    "answer_num":quiz_table[6],
+                    "explanation":quiz_table[7]
                 }
             }
 
             //問題表示
             function showQuiz() {
-                // 問題番号をランダムに出力
-                quiz_num = Math.floor( Math.random() * (quiz_list.length - 1) ) ;
-                quiz = quiz_list[quiz_num];
+                getQuiz();
                 // 問題の表示
                 $("#js-question-number").text(`問${quiz_number + 1}`);
-                $("#js-question").text(quiz[0]);
-                for(i=1; i<5; i++){
-                    quiz[i] = quiz[i].replace(/\(1\)|\(2\)|\(3\)|\(4\)/g,"");
-                    quiz[i] = quiz[i].replace(/（/g,"");
-                    $(`#js-choice-${i}`).text(`（${i}）${quiz[i]}`);
+                $("#js-question").text(quiz["question"]);
+                for(i=0; i<4; i++){
+                    quiz["choice"][i] = quiz["choice"][i].replace(/\(1\)|\(2\)|\(3\)|\(4\)/g,"");
+                    quiz["choice"][i] = quiz["choice"][i].replace(/（/g,"");
+                    $(`#js-choice-${i+1}`).text(`${quiz["choice"][i]}`);
                 }
+            }
+
+            function removeQuiz() {
                 //表示した問題を再度表示しないようリストから削除
                 quiz_list = quiz_list.filter(function(v){
                     return v !== quiz;
                 });
-
-                //表示中の問題を覚えておく
-                now_quiz = quiz;
             }
 
-            //解説はxを改行に変換し表示＆選択番号・正解番号の表示
+            //解説の表示＆選択番号・正解番号の表示
             function showExplanation(){
-                now_quiz[6] = now_quiz[6].replace(/x/g, '<span>');
+                //(1)～(4)があればlistタグで囲む
+                const pattern =/\(1\).*\(2\).*\(3\).*\(4\).*/i;
+                if(pattern.test(quiz["explanation"])) {
+                    quiz["explanation"] = quiz["explanation"].replace(/\(1\)/i,'<ul><li>');
+                    quiz["explanation"] = quiz["explanation"].replace(/\(2\)/i,'</li><li>');
+                    quiz["explanation"] = quiz["explanation"].replace(/\(3\)/i,'</li><li>');
+                    quiz["explanation"] = quiz["explanation"].replace(/\(4\)/i,'</li><li>');
+                    quiz["explanation"] += '</li></ul>';
+                }
                 //解説の表示
                 $(".explanation-wrap").slideDown();
-                $("#js-explanation").html(now_quiz[6]);
+                $("#js-explanation").html(quiz["explanation"]);
                 // 選択番号・正解番号の表示
                 $("#js-choiceAnswer").text(choice_value);
-                $("#js-answer").text(quiz[5]);
+                $("#js-answer").text(quiz["answer_num"]);
             }
 
 
             //〇×の表示をフェードインフェードアウト
             function trueFalse(){
-                if(choice_value === Number(quiz[5])){
+                if(choice_value === Number(quiz["answer_num"])){
                     $("#js-true").addClass("is-show");
                 }else{
                     $("#js-false").addClass("is-show");
@@ -99,7 +121,7 @@ $(function(){
                     choice_value = 0;
                     true_answer = 0;
                     quiz_number = 0;
-                    getQuiz();
+                    initQuiz();
                     $("#js-result").hide();
                     $("#js-main").fadeIn();
                     showQuiz();
@@ -115,13 +137,11 @@ $(function(){
                     for(i=1; i<5; i++){
                         if ($(this).hasClass(`choice-btn-${i}`)) {
                             choice_value = i;
-                            if(choice_value === Number(quiz[5])){
+                            if(choice_value === Number(quiz["answer_num"])){
                                 true_answer++;
-                            }else{
                             }
                         }
                     }
-
                     // 解答ボタンを非表示
                     $(".choice-btn-wrap").removeClass("is-show");
 
@@ -150,6 +170,7 @@ $(function(){
                     if(quiz_number === 20){
                         judge();
                     }else{
+                        removeQuiz();
                         showQuiz();
                     }
                 });
@@ -161,7 +182,7 @@ $(function(){
             ========================================================================== */
             $(function() {
                 // 問題の表示
-                getQuiz();
+                initQuiz();
                 showQuiz();
                 checkAnswer();
                 nextQuiz();
