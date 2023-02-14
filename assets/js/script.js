@@ -62,8 +62,9 @@ $(function(){
             function removeQuiz() {
                 //表示した問題を再度表示しないようリストから削除
                 quiz_list = quiz_list.filter(function(v){
-                    return v !== quiz;
+                    return v !== quiz_table;
                 });
+                console.log(quiz_list.length);
             }
 
             //解説の表示＆選択番号・正解番号の表示
