@@ -28,7 +28,7 @@ html {
 body {
   background: #fff;
   color: #3e3e3e;
-  font-family: "Noto Sans JP", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", "Droid Sans", sans-serif;
+  font-family: "Noto Sans JP", "游ゴシック", "YuGothic", "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", "Meiryo", "Droid Sans", sans-serif;
   line-height: 1.45;
   font-weight: 500;
   font-size: 1.6rem;
@@ -83,11 +83,51 @@ body {
   margin-top: 10px;
   letter-spacing: 0.3rem;
 }
+.quiz-container .choice-wrap ul,
+.quiz-container .explanation ul {
+  margin-left: 1.5em;
+}
+.quiz-container .choice-wrap ul li,
+.quiz-container .explanation ul li {
+  letter-spacing: 0.2rem;
+  counter-increment: cnt;
+  position: relative;
+}
+.quiz-container .choice-wrap ul li::before,
+.quiz-container .explanation ul li::before {
+  position: absolute;
+  display: inline-block;
+  content: "(" counter(cnt) ")";
+  margin-left: -2em;
+  width: 3rem;
+  text-align: right;
+  top: 0;
+  left: 0;
+}
+.quiz-container .choice-wrap ul li + li,
+.quiz-container .explanation ul li + li {
+  margin-top: 10px;
+}
 .quiz-container .choice-wrap {
   padding: 20px;
 }
+.quiz-container .choice-wrap .choice-items {
+  margin-left: 1.5em;
+}
 .quiz-container .choice-wrap .choice-item {
   letter-spacing: 0.2rem;
+  counter-increment: cnt;
+  position: relative;
+}
+.quiz-container .choice-wrap .choice-item::before {
+  position: absolute;
+  display: inline-block;
+  content: "(" counter(cnt) ")";
+  margin-left: -2em;
+  width: 3rem;
+  text-align: right;
+  top: 0;
+  left: 0;
 }
 .quiz-container .choice-wrap .choice-item + .choice-item {
   margin-top: 10px;
