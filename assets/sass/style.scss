@@ -20,10 +20,50 @@
     letter-spacing: 0.3rem;
   }
 
+
+  .choice-wrap,
+  .explanation{
+    ul{
+      margin-left: 1.5em;
+      li{
+        letter-spacing: 0.2rem;
+        counter-increment: cnt;
+        position:relative;
+        &::before {
+          position:absolute;
+          display: inline-block;
+          content:"(" counter(cnt) ")";
+          margin-left: -2.0em;
+          width: 3rem;
+          text-align: right;
+          top:0;
+          left:0;
+        }
+      }
+      li + li {
+        margin-top: 10px;
+      }
+    }
+  }
   .choice-wrap{
     padding:20px;
+    .choice-items {
+      margin-left: 1.5em;
+    }
     .choice-item{
       letter-spacing: 0.2rem;
+      counter-increment: cnt;
+      position:relative;
+    }
+    .choice-item::before {
+      position:absolute;
+      display: inline-block;
+      content:"(" counter(cnt) ")";
+      margin-left: -2.0em;
+      width: 3rem;
+      text-align: right;
+      top:0;
+      left:0;
     }
     .choice-item + .choice-item{
       margin-top: 10px;
